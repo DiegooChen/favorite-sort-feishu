@@ -1,0 +1,27 @@
+{
+  "manifest_version": 3,
+  "name": "Bookmarks to Feishu (Bitable)",
+  "version": "1.0.3",
+  "description": "Clean, dedupe, tag and sync bookmarks to Feishu Bitable; delete/clear/write-back.",
+  "permissions": [
+    "bookmarks",
+    "storage",
+    "identity",
+    "scripting"
+  ],
+  "host_permissions": [
+    "https://*.feishu.cn/*",
+    "https://*.larksuite.com/*",
+    "https://*/",
+    "http://*/"
+  ],
+  "action": {},
+  "options_page": "src/options.html",
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  }
+}

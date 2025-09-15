@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir:*)",
+      "Bash(find:*)",
+      "Bash(npm run build:*)",
+      "Bash(npm install)",
+      "Bash(sed:*)",
+      "WebFetch(domain:open.feishu.cn)",
+      "WebSearch",
+      "WebFetch(domain:blog.csdn.net)",
+      "Bash(npm run type-check:*)",
+      "Bash(powershell:*)",
+      "Bash(dir:*)",
+      "Bash(tree:*)",
+      "mcp__filesystem__directory_tree",
+      "mcp__filesystem__list_directory"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
