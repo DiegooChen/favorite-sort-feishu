@@ -45,8 +45,7 @@ export class FeishuIntegration {
       });
 
       const data = await response.json();
-      console.log('认证API完整响应:', data);
-      
+
       await Logger.debug('FEISHU_AUTH_RESPONSE', '飞书认证API响应', {
         code: data.code,
         msg: data.msg,
@@ -273,8 +272,7 @@ export class FeishuIntegration {
     onProgress?.(progress);
     
     const permissionCheck = await this.checkPermissions(finalConfig);
-    console.log('权限检查结果:', permissionCheck);
-    
+
     if (!permissionCheck.canWrite) {
       throw new Error(permissionCheck.error || '没有写入权限');
     }
@@ -298,14 +296,9 @@ export class FeishuIntegration {
       }));
 
       try {
-        console.log(`正在插入第 ${batchNumber} 批记录，包含 ${records.length} 条数据`);
-        console.log('样本记录字段:', Object.keys(records[0]?.fields || {}));
-        
         await this.insertRecords(finalConfig, records);
         progress.processed += batch.length;
         progress.successful += batch.length;
-        
-        console.log(`第 ${batchNumber} 批导入成功，累计成功: ${progress.successful}`);
         progress.status = `第 ${batchNumber} 批导入成功，已完成 ${progress.processed}/${bookmarks.length} 个书签`;
       } catch (error) {
         console.error(`第 ${batchNumber} 批导入失败:`, error);

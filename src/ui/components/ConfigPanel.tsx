@@ -13,7 +13,6 @@ const testFeishuConnection = async (config: any) => {
     const testConfig = { ...config?.feishu };
     if (config?.feishu?.manualToken && config.feishu.manualToken.trim()) {
       testConfig.accessToken = config.feishu.manualToken.trim();
-      console.log('🔑 使用手动输入的Access Token进行连接测试');
     }
     
     const result = await chrome.runtime.sendMessage({

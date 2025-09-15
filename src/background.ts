@@ -337,14 +337,6 @@ async function handleSyncToFeishu(payload: { bookmarks: any[], config: any, mapp
       }
     });
     
-    console.log(`Background: 开始同步 ${bookmarks.length} 个书签到飞书`);
-    console.log('飞书配置:', { 
-      appId: config.appId?.substring(0, 8) + '...', 
-      hasSecret: !!config.appSecret,
-      baseId: config.baseId,
-      tableId: config.tableId 
-    });
-    
     const result = await FeishuIntegration.importBookmarks(
       config,
       bookmarks,
@@ -358,8 +350,6 @@ async function handleSyncToFeishu(payload: { bookmarks: any[], config: any, mapp
         Logger.debug('SYNC_TO_FEISHU_PROGRESS', '同步进度更新', progress);
       }
     );
-    
-    console.log('飞书同步最终结果:', result);
     
     await Logger.info('SYNC_TO_FEISHU_SUCCESS', '飞书同步完成', {
       total: result.total,

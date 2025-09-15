@@ -80,7 +80,6 @@ export const OperationPanel: React.FC<OperationPanelProps> = ({
     try {
       // 构建payload
       const bookmarksToSync = selectedBookmarks.length > 0 ? selectedBookmarks : bookmarks;
-      console.log(`准备同步 ${bookmarksToSync.length} 个书签:`, bookmarksToSync.slice(0, 3)); // 显示前3个用于调试
       
       let payload: any = {
         bookmarks: bookmarksToSync
@@ -99,7 +98,6 @@ export const OperationPanel: React.FC<OperationPanelProps> = ({
         const feishuConfig = { ...config.feishu };
         if (config.feishu.manualToken && config.feishu.manualToken.trim()) {
           feishuConfig.accessToken = config.feishu.manualToken.trim();
-          console.log('🔑 使用手动输入的Access Token进行同步');
         }
         
         payload.config = feishuConfig;
@@ -153,7 +151,6 @@ export const OperationPanel: React.FC<OperationPanelProps> = ({
       
       // 显示成功消息
       if (action === 'SYNC_TO_FEISHU') {
-        console.log('飞书同步结果:', result);
         const successful = result?.successful || 0;
         const failed = result?.failed || 0;
         const total = result?.total || 0;

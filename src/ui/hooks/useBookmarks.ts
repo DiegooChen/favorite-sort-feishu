@@ -68,7 +68,6 @@ export const useBookmarks = () => {
       
       // sendMessage 返回的是 response.data，即书签数组
       const bookmarksData = await sendMessage('SCAN_BOOKMARKS') as Bookmark[];
-      console.log('扫描结果:', bookmarksData);
       setBookmarks(bookmarksData || []);
       
       // 计算统计信息
