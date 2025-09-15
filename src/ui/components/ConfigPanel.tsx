@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './ConfigPanel.css';
 
 interface ConfigPanelProps {
@@ -35,6 +35,40 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({
   onConfigSave,
   onConfigReset
 }) => {
+  // 本地状态管理，避免每次输入都触发重新渲染
+  const [localConfig, setLocalConfig] = useState(config || {});
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+
+  // 当外部config变化时，更新本地状态
+  useEffect(() => {
+    setLocalConfig(config || {});
+    setHasUnsavedChanges(false);
+  }, [config]);
+
+  // 更新本地配置状态
+  const updateLocalConfig = (key: string, data: any) => {
+    setLocalConfig(prev => ({
+      ...prev,
+      [key]: data
+    }));
+    setHasUnsavedChanges(true);
+  };
+
+  // 保存配置
+  const handleSaveConfig = async () => {
+    try {
+      // 保存所有修改的配置
+      if (localConfig.normalization) {
+        await onConfigSave('normalization', localConfig.normalization);
+      }
+      if (localConfig.feishu) {
+        await onConfigSave('feishu', localConfig.feishu);
+      }
+      setHasUnsavedChanges(false);
+    } catch (error) {
+      alert(`保存配置失败: ${error.message}`);
+    }
+  };
   return (
     <div className="config-panel">
       <h2>配置设置</h2>
@@ -42,14 +76,14 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({
         <div className="config-section">
           <h3>URL规范化</h3>
           <p className="section-description">配置URL处理和清洗规则</p>
-          {config?.normalization && (
+          {localConfig?.normalization && (
             <div className="config-options">
               <label className="config-checkbox">
                 <input
                   type="checkbox"
-                  checked={config.normalization.removeWww || false}
-                  onChange={(e) => onConfigSave('normalization', {
-                    ...config.normalization,
+                  checked={localConfig.normalization.removeWww || false}
+                  onChange={(e) => updateLocalConfig('normalization', {
+                    ...localConfig.normalization,
                     removeWww: e.target.checked
                   })}
                 />
@@ -61,9 +95,9 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({
               <label className="config-checkbox">
                 <input
                   type="checkbox"
-                  checked={config.normalization.removeMobile || false}
-                  onChange={(e) => onConfigSave('normalization', {
-                    ...config.normalization,
+                  checked={localConfig.normalization.removeMobile || false}
+                  onChange={(e) => updateLocalConfig('normalization', {
+                    ...localConfig.normalization,
                     removeMobile: e.target.checked
                   })}
                 />
@@ -75,9 +109,9 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({
               <label className="config-checkbox">
                 <input
                   type="checkbox"
-                  checked={config.normalization.removeTrackingParams || false}
-                  onChange={(e) => onConfigSave('normalization', {
-                    ...config.normalization,
+                  checked={localConfig.normalization.removeTrackingParams || false}
+                  onChange={(e) => updateLocalConfig('normalization', {
+                    ...localConfig.normalization,
                     removeTrackingParams: e.target.checked
                   })}
                 />
@@ -89,9 +123,9 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({
               <label className="config-checkbox">
                 <input
                   type="checkbox"
-                  checked={config.normalization.removeFragment || false}
-                  onChange={(e) => onConfigSave('normalization', {
-                    ...config.normalization,
+                  checked={localConfig.normalization.removeFragment || false}
+                  onChange={(e) => updateLocalConfig('normalization', {
+                    ...localConfig.normalization,
                     removeFragment: e.target.checked
                   })}
                 />
@@ -117,9 +151,9 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({
                 <input
                   type="text"
                   placeholder="请输入飞书应用ID"
-                  value={config?.feishu?.appId || ''}
-                  onChange={(e) => onConfigSave('feishu', {
-                    ...config?.feishu,
+                  value={localConfig?.feishu?.appId || ''}
+                  onChange={(e) => updateLocalConfig('feishu', {
+                    ...localConfig?.feishu,
                     appId: e.target.value
                   })}
                 />
@@ -134,9 +168,9 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({
                 <input
                   type="password"
                   placeholder="请输入飞书应用密钥"
-                  value={config?.feishu?.appSecret || ''}
-                  onChange={(e) => onConfigSave('feishu', {
-                    ...config?.feishu,
+                  value={localConfig?.feishu?.appSecret || ''}
+                  onChange={(e) => updateLocalConfig('feishu', {
+                    ...localConfig?.feishu,
                     appSecret: e.target.value
                   })}
                 />
@@ -151,9 +185,9 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({
                 <input
                   type="text"
                   placeholder="例如: UdCEbCW9fa1ness3LDmcTECVn8c"
-                  value={config?.feishu?.baseId || ''}
-                  onChange={(e) => onConfigSave('feishu', {
-                    ...config?.feishu,
+                  value={localConfig?.feishu?.baseId || ''}
+                  onChange={(e) => updateLocalConfig('feishu', {
+                    ...localConfig?.feishu,
                     baseId: e.target.value
                   })}
                 />
@@ -168,9 +202,9 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({
                 <input
                   type="text"
                   placeholder="例如: tblRe3G9kNMXN7RD"
-                  value={config?.feishu?.tableId || ''}
-                  onChange={(e) => onConfigSave('feishu', {
-                    ...config?.feishu,
+                  value={localConfig?.feishu?.tableId || ''}
+                  onChange={(e) => updateLocalConfig('feishu', {
+                    ...localConfig?.feishu,
                     tableId: e.target.value
                   })}
                 />
@@ -192,9 +226,9 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({
                 <input
                   type="text"
                   placeholder="临时输入Access Token进行测试"
-                  value={config?.feishu?.manualToken || ''}
-                  onChange={(e) => onConfigSave('feishu', {
-                    ...config?.feishu,
+                  value={localConfig?.feishu?.manualToken || ''}
+                  onChange={(e) => updateLocalConfig('feishu', {
+                    ...localConfig?.feishu,
                     manualToken: e.target.value
                   })}
                 />
@@ -212,11 +246,16 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({
           <span className="btn-icon">🔄</span>
           重置配置
         </button>
-        <button className="save-btn">
+        <button
+          onClick={handleSaveConfig}
+          className="save-btn"
+          disabled={!hasUnsavedChanges}
+          style={{ opacity: hasUnsavedChanges ? 1 : 0.6 }}
+        >
           <span className="btn-icon">💾</span>
-          保存配置
+          {hasUnsavedChanges ? '保存配置' : '已保存'}
         </button>
-        <button onClick={() => testFeishuConnection(config)} className="test-btn">
+        <button onClick={() => testFeishuConnection(localConfig)} className="test-btn">
           <span className="btn-icon">🧪</span>
           测试飞书连接
         </button>

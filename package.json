@@ -1,6 +1,6 @@
 {
   "name": "bookmarks-to-feishu",
-  "version": "1.0.3",
+  "version": "1.0.5",
   "description": "Edge/Chrome bookmarks organizer and Feishu Bitable sync extension",
   "scripts": {
     "prebuild": "node scripts/bump-version.js",

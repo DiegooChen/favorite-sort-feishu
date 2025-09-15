@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Bookmarks to Feishu (Bitable)",
-  "version": "1.0.3",
+  "version": "1.0.5",
   "description": "Clean, dedupe, tag and sync bookmarks to Feishu Bitable; delete/clear/write-back.",
   "permissions": [
     "bookmarks",
